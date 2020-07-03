@@ -4,13 +4,18 @@
 #include <math.h>
 #include <iostream>
 #include <utility>
+#include <vector>
 #define START_X 0.0
 #define START_Y -1.0
 #define START_ANGLE 90
+#define DISTANCE 0.005
 
 using namespace std;
 
-double toRad(double angle){ return (angle*M_PI)/180; }
+int LENGTH = 7;
+int LEFT_ANGLE = 15;
+int RIGHT_ANGLE = 60;
+string INITIAL = "[X]";
 
 class Turtle {
    double x, y, direction;
@@ -21,6 +26,32 @@ class Turtle {
       glVertex2d(fX, fY);
       glEnd();
       glFlush();
+   }
+
+   double toRad(double angle){ return (angle*M_PI)/180; }
+
+   string replaceString(char symbol, string replacement, string sequence){
+      for(int i = sequence.size()-1; i>=0; i--){
+         if(sequence[i] == symbol){
+            if(i==sequence.size()-1)
+               sequence = sequence.substr(0, i) + replacement;
+            else if(i==0)
+               sequence = replacement + sequence.substr(1);
+            else
+               sequence = sequence.substr(0,i) + replacement + sequence.substr(i+1);
+         }
+      }
+
+      return sequence;
+   }
+
+   string gen(vector<pair<char, string>> rules){
+      string sequence = INITIAL;
+
+      for (int i = 0; i < LENGTH; i++)
+         for(pair<char, string> rule : rules)
+            sequence = replaceString(rule.first, rule.second, sequence);
+      return sequence;
    }
 
 public:
@@ -64,4 +95,32 @@ public:
       setPosition(fX, fY);
    }
 
+   void draw(vector<pair<char, string>> rules){
+      string symbols = gen(rules);
+      
+      vector<pair<double, double>> stackPos;
+      vector<double> stackDir;
+
+      for(int i=0; i<symbols.size()-1; i++){
+         if(symbols[i] == 'F')
+            forward(DISTANCE);
+         else if(symbols[i] == '-')
+            left(LEFT_ANGLE);
+         else if(symbols[i] == '+')
+            right(RIGHT_ANGLE);
+         else if(symbols[i] == '['){
+            stackPos.push_back(getPosition());
+            stackDir.push_back(direction);
+         }
+         else if(symbols[i] == ']'){
+            setPosition(stackPos[stackPos.size()-1].first, stackPos[stackPos.size()-1].second);
+            setDirection(stackDir[stackDir.size()-1]);
+            stackDir.pop_back();
+            stackPos.pop_back();
+         }
+      }
+   }
 };
+
+
+
