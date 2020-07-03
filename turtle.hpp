@@ -20,6 +20,22 @@ string INITIAL = "[X]";
 class Turtle {
    double x, y, direction;
 
+   void right(double angle){ 
+         direction -= angle; 
+   }
+
+   void left(double angle){ 
+      direction += angle; 
+   }
+
+   void forward(double distance){
+      double fX = x + distance*cos(toRad(direction)),
+             fY = y + distance*sin(toRad(direction));
+
+      drawLine(x, y, fX, fY);
+      setPosition(fX, fY);
+   }
+
    void drawLine(double x, double y, double fX, double fY){
       glBegin(GL_LINES);
       glVertex2d(x, y);
@@ -79,25 +95,9 @@ public:
       return direction;
    }
 
-   void right(double angle){ 
-         direction -= angle; 
-   }
-
-   void left(double angle){ 
-      direction += angle; 
-   }
-
-   void forward(double distance){
-      double fX = x + distance*cos(toRad(direction)),
-             fY = y + distance*sin(toRad(direction));
-
-      drawLine(x, y, fX, fY);
-      setPosition(fX, fY);
-   }
-
    void draw(vector<pair<char, string>> rules){
       string symbols = gen(rules);
-      
+
       vector<pair<double, double>> stackPos;
       vector<double> stackDir;
 
