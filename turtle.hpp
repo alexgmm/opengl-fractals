@@ -12,9 +12,11 @@
 
 using namespace std;
 
+vector<pair<char, string>> rules;
+
 int LENGTH = 7;
-int LEFT_ANGLE = 15;
-int RIGHT_ANGLE = 60;
+int LEFT_ANGLE = 25;
+int RIGHT_ANGLE = 25;
 string INITIAL = "[X]";
 
 class Turtle {
@@ -61,7 +63,7 @@ class Turtle {
       return sequence;
    }
 
-   string gen(vector<pair<char, string>> rules){
+   string gen(){
       string sequence = INITIAL;
 
       for (int i = 0; i < LENGTH; i++)
@@ -95,8 +97,8 @@ public:
       return direction;
    }
 
-   void draw(vector<pair<char, string>> rules){
-      string symbols = gen(rules);
+   void draw(){
+      string symbols = gen();
 
       vector<pair<double, double>> stackPos;
       vector<double> stackDir;
@@ -121,6 +123,3 @@ public:
       }
    }
 };
-
-
-

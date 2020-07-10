@@ -1,22 +1,29 @@
 #include <GL/glut.h>
 #include <iostream>
 #include <string>
+#include <cstdlib>
 #include "turtle.hpp"
 
 #define DISTANCE 0.005
 
 using namespace std;
 
-vector<pair<char, string>> rules;
+
 
 void config();
 void displayMe();
 
 int main(int argc, char **argv){
+   int n;
+   char left;
+   string right;
+   cin >> n;
+   for(n; n>0; n--){
+      cin >> left;
+      cin >> right;
+      rules.push_back(make_pair(left, right));
+   }
 
-   rules.push_back(make_pair('F',"FF"));
-   rules.push_back(make_pair('X',"F-[+X]+[F]-F[-FX]+X"));
-   
    glutInit(&argc, argv);
    glutInitDisplayMode(GLUT_SINGLE);
    config();
@@ -40,6 +47,5 @@ void config(){
 
 void displayMe(void){
    Turtle t;
-   t.draw(rules);
+   t.draw();
 }
-
